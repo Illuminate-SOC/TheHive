@@ -6,7 +6,7 @@ FROM openjdk:8 as build-env
 
 LABEL MAINTAINER="TheHive Project <support@thehive-project.org>"
 
-ARG THEHIVE_VERSION=develop
+ARG THEHIVE_VERSION=main
 
 RUN apt update && \
   apt install -y apt-transport-https && \
@@ -21,9 +21,11 @@ RUN apt update && \
       clone \
       --branch=$THEHIVE_VERSION \
       --depth=1 \
-      https://github.com/TheHive-Project/TheHive.git && \
-  echo '{"allow_root": true}' > /root/.bowerrc && \
+      https://github.com/illuminate-gardepe/TheHive.git && \
+  echo '{"allow_root": true}' > /root/.bowerrc && \ 
   cd TheHive && \
+  git submodule init && \
+  git submodule update && \
   ./sbt clean stage && \
   mv /TheHive/target/universal/stage /opt/thehive && \
   mv /TheHive/package/docker/entrypoint /opt/thehive/entrypoint && \
@@ -53,11 +55,18 @@ RUN apt update && \
     useradd --system --uid 1000 --gid 1000 thehive || \
     adduser -S -u 1000 -G thehive thehive ) && \
   mkdir /etc/thehive && \
+  mkdir -p /data/files && \
+  mkdir /data/index && \
+  mkdir /data/db && \
+  chown -R thehive:thehive /data/index && \
+  chown -R thehive:thehive /data/files && \
+  chown -R thehive:thehive /data/db && \
   cp /opt/thehive/conf/logback.xml /etc/thehive/logback.xml && \
   chown -R root:root /opt/thehive && \
   touch /var/log/thehive/application.log && \
   chown -R thehive:thehive /var/log/thehive /etc/thehive && \
-  chmod +x /opt/thehive/entrypoint
+  chmod +x /opt/thehive/entrypoint && \
+  chmod 777 /opt/thehive/bin/thehive
 
 USER thehive
 
