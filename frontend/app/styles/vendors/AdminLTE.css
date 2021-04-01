@@ -116,6 +116,18 @@ body {
   right: 0;
   left: 0;
 }
+
+/* Banner */
+.banner {
+  height: 25px;   
+}
+.banner p {
+  color: black;
+  text-align: center;
+  padding: 2px 0;
+  background: rgb(82,205,66);
+}
+
 .fixed .content-wrapper,
 .fixed .right-side {
   padding-top: 50px;
