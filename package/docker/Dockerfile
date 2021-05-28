@@ -21,7 +21,7 @@ RUN apt update && \
       clone \
       --branch=$THEHIVE_VERSION \
       --depth=1 \
-      https://github.com/illuminate-gardepe/TheHive.git && \
+      https://github.com/Illuminate-SOC/TheHive.git && \
   echo '{"allow_root": true}' > /root/.bowerrc && \ 
   cd TheHive && \
   git submodule init && \
